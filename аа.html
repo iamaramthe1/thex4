@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE 4×4 — Aram The 1</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --gold: #C9A84C;
+  --gold2: #E8C97A;
+  --bg: #080808;
+  --card: #0F0F0F;
+  --card2: #111;
+  --border: #1E1E1E;
+  --text: #E8E4DC;
+  --muted: #666;
+  --sub: #444;
+
+  /* muscle group colors */
+  --legs: #7B5EA7;
+  --legs2: rgba(123,94,167,0.12);
+  --legs-b: rgba(123,94,167,0.35);
+  --shoulder: #C9A84C;
+  --shoulder2: rgba(201,168,76,0.12);
+  --shoulder-b: rgba(201,168,76,0.35);
+  --bicep: #4A8FA8;
+  --bicep2: rgba(74,143,168,0.12);
+  --bicep-b: rgba(74,143,168,0.35);
+  --back: #4A7C59;
+  --back2: rgba(74,124,89,0.12);
+  --back-b: rgba(74,124,89,0.35);
+  --chest: #A84A4A;
+  --chest2: rgba(168,74,74,0.12);
+  --chest-b: rgba(168,74,74,0.35);
+  --tricep: #8A6A3A;
+  --tricep2: rgba(138,106,58,0.12);
+  --tricep-b: rgba(138,106,58,0.35);
+  --glute: #A8627A;
+  --glute2: rgba(168,98,122,0.12);
+  --glute-b: rgba(168,98,122,0.35);
+}
+html { background: var(--bg); }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* NAV TABS */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(8,8,8,0.97);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.nav::-webkit-scrollbar { display: none; }
+.nav-inner {
+  display: flex; align-items: stretch;
+  min-width: max-content;
+  padding: 0 12px;
+}
+.nav-tab {
+  padding: 14px 16px;
+  font-size: 9px; font-weight: 700;
+  letter-spacing: 2px; text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+  background: none; border-top: none; border-left: none; border-right: none;
+  outline: none;
+}
+.nav-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* PAGES */
+.page { display: none; }
+.page.active { display: block; }
+
+/* HERO BANNER */
+.day-hero {
+  padding: 48px 20px 36px;
+  text-align: center;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.day-hero-bg {
+  position: absolute; inset: 0;
+  opacity: 0.06;
+  pointer-events: none;
+}
+.day-num {
+  font-size: 9px; font-weight: 700; letter-spacing: 6px;
+  text-transform: uppercase; color: var(--gold);
+  margin-bottom: 10px;
+}
+.day-title {
+  font-size: clamp(28px, 6vw, 52px);
+  font-weight: 900; font-style: italic;
+  line-height: 1; letter-spacing: -1px;
+  margin-bottom: 10px;
+}
+.day-muscles {
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 6px;
+  margin-top: 14px;
+}
+.muscle-badge {
+  font-size: 8px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; padding: 4px 10px;
+  border: 1px solid; border-radius: 2px;
+}
+
+/* RULES PAGE */
+.rules-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  margin: 0;
+}
+@media(max-width:560px){ .rules-grid { grid-template-columns: 1fr; } }
+.rule-card {
+  padding: 20px; background: var(--card2);
+  border: 1px solid var(--border);
+}
+.rule-label {
+  font-size: 8px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 6px;
+}
+.rule-val { font-size: 12px; color: #AAA; line-height: 1.6; }
+.rule-val strong { color: var(--text); font-weight: 600; }
+
+/* WEEK OVERVIEW */
+.week-strip {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: 20px;
+}
+.ws-row {
+  display: grid; grid-template-columns: 60px 1fr; gap: 8px; align-items: center;
+}
+.ws-day {
+  font-size: 8px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--sub); text-align: right;
+}
+.ws-bar {
+  padding: 10px 14px; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.ws-name { font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+.ws-focus { font-size: 8px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; }
+
+/* SECTION */
+.sec { padding: 0 16px 32px; max-width: 760px; margin: 0 auto; }
+
+/* EXERCISE BLOCKS */
+.block-label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 22px 0 10px;
+}
+.block-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.block-lbl-text {
+  font-size: 8px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.block-line { flex: 1; height: 1px; background: var(--border); }
+
+.ex-card {
+  border: 1px solid var(--border);
+  margin-bottom: 2px;
+  overflow: hidden;
+}
+.ex-head {
+  padding: 14px 16px 10px;
+  display: flex; align-items: flex-start; gap: 12px;
+}
+.ex-id {
+  font-size: 20px; font-weight: 900; font-style: italic;
+  line-height: 1; flex-shrink: 0; margin-top: 1px;
+  opacity: 0.25;
+}
+.ex-main { flex: 1; }
+.ex-name {
+  font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.ex-params {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px;
+}
+.param {
+  font-size: 8px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; padding: 3px 8px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  color: #999;
+}
+.ex-footer {
+  padding: 0 16px 14px 16px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+}
+@media(max-width:460px){ .ex-footer { grid-template-columns: 1fr; } }
+.ex-note {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+}
+.ex-note-lbl {
+  font-size: 7px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 4px; opacity: 0.6;
+}
+.ex-note-txt { font-size: 11px; color: #888; line-height: 1.55; }
+
+/* VIDEO MODAL */
+.modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 999;
+  background: rgba(0,0,0,0.92);
+  align-items: center; justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  width: 92%; max-width: 600px;
+  background: #0D0D0D;
+  border: 1px solid #1E1E1E;
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.modal-header {
+  padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid #1A1A1A;
+}
+.modal-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--text);
+}
+.modal-close {
+  width: 28px; height: 28px; border-radius: 2px;
+  background: #1A1A1A; border: 1px solid #2A2A2A;
+  color: #888; font-size: 14px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { background: #222; color: var(--text); }
+.modal-video { position: relative; padding-bottom: 56.25%; height: 0; }
+.modal-video iframe {
+  position: absolute; inset: 0; width: 100%; height: 100%; border: none;
+}
+
+/* VIDEO BUTTON */
+.video-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; margin-top: 4px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 2px; cursor: pointer;
+  font-size: 8px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--gold);
+  transition: background 0.2s;
+}
+.video-btn:hover { background: rgba(201,168,76,0.15); }
+.video-btn svg { width: 10px; height: 10px; fill: var(--gold); }
+
+/* FINISHER */
+.finisher {
+  margin: 16px 0 0;
+  padding: 16px;
+  background: rgba(201,168,76,0.04);
+  border: 1px solid rgba(201,168,76,0.15);
+}
+.fin-title {
+  font-size: 8px; font-weight: 700; letter-spacing: 4px;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 10px;
+}
+.fin-items { display: flex; flex-direction: column; gap: 4px; }
+.fin-item {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: #888;
+  padding: 6px 0; border-bottom: 1px solid #1A1A1A;
+}
+.fin-item:last-child { border-bottom: none; }
+.fin-item-num { color: var(--gold); font-weight: 700; font-size: 10px; }
+
+/* LEGEND */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  padding: 16px; border-bottom: 1px solid var(--border);
+}
+.leg-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 8px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted);
+}
+.leg-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- VIDEO MODAL -->
+<div class="modal-overlay" id="videoModal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Видео</div>
+      <button class="modal-close" onclick="closeVideoModal()">✕</button>
+    </div>
+    <div class="modal-video">
+      <iframe id="modalIframe" src="" allowfullscreen allow="autoplay"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <button class="nav-tab active" onclick="show('overview')">Обзор</button>
+    <button class="nav-tab" onclick="show('rules')">Правила</button>
+    <button class="nav-tab" onclick="show('a1')">A1 · Ноги</button>
+    <button class="nav-tab" onclick="show('b1')">B1 · Спина</button>
+    <button class="nav-tab" onclick="show('a2')">A2 · Плечи</button>
+    <button class="nav-tab" onclick="show('b2')">B2 · Грудь</button>
+  </div>
+</nav>
+
+<!-- ══════════ OVERVIEW ══════════ -->
+<div id="page-overview" class="page active">
+  <div class="day-hero">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(201,168,76,0.06),transparent);pointer-events:none;"></div>
+    <div class="day-num">THE 4×4 · Training System</div>
+    <div class="day-title">THE 4×4<br><span style="color:var(--gold);">SPLIT</span></div>
+    <div style="font-size:11px;color:var(--muted);margin-top:8px;letter-spacing:2px;">4 тренировки · 4 недели · 8-недельная периодизация</div>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:var(--legs);"></div>Ноги</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--shoulder);"></div>Плечи</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--bicep);"></div>Бицепс</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--back);"></div>Спина</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--chest);"></div>Грудь</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--tricep);"></div>Трицепс</div>
+    <div class="leg-item"><div class="leg-dot" style="background:var(--glute);"></div>Ягодицы</div>
+  </div>
+
+  <div class="week-strip">
+    <div class="ws-row">
+      <div class="ws-day">День 1</div>
+      <div class="ws-bar" style="border-left:3px solid var(--legs);background:var(--legs2);">
+        <div>
+          <div class="ws-name" style="color:var(--legs);">A1 — Тренировка</div>
+          <div class="ws-focus">Ноги приоритет · Плечи · Бицепс</div>
+        </div>
+        <div style="display:flex;gap:4px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--legs);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--shoulder);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--bicep);"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ws-row">
+      <div class="ws-day">День 2</div>
+      <div class="ws-bar" style="border-left:3px solid var(--back);background:var(--back2);">
+        <div>
+          <div class="ws-name" style="color:var(--back);">B1 — Тренировка</div>
+          <div class="ws-focus">Спина приоритет · Грудь · Трицепс</div>
+        </div>
+        <div style="display:flex;gap:4px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--back);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--chest);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--tricep);"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ws-row">
+      <div class="ws-day">День 3</div>
+      <div class="ws-bar" style="border-left:3px solid #333;background:rgba(255,255,255,0.02);">
+        <div>
+          <div class="ws-name" style="color:#555;">Активный отдых</div>
+          <div class="ws-focus">Лёгкое кардио / ходьба / растяжка</div>
+        </div>
+      </div>
+    </div>
+    <div class="ws-row">
+      <div class="ws-day">День 4</div>
+      <div class="ws-bar" style="border-left:3px solid var(--shoulder);background:var(--shoulder2);">
+        <div>
+          <div class="ws-name" style="color:var(--shoulder);">A2 — Тренировка</div>
+          <div class="ws-focus">Плечи приоритет · Ноги · Бицепс</div>
+        </div>
+        <div style="display:flex;gap:4px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--shoulder);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--legs);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--bicep);"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ws-row">
+      <div class="ws-day">День 5</div>
+      <div class="ws-bar" style="border-left:3px solid var(--chest);background:var(--chest2);">
+        <div>
+          <div class="ws-name" style="color:var(--chest);">B2 — Тренировка</div>
+          <div class="ws-focus">Грудь приоритет · Спина · Трицепс</div>
+        </div>
+        <div style="display:flex;gap:4px;">
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--chest);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--back);"></div>
+          <div style="width:8px;height:8px;border-radius:50%;background:var(--tricep);"></div>
+        </div>
+      </div>
+    </div>
+    <div class="ws-row">
+      <div class="ws-day">День 6</div>
+      <div class="ws-bar" style="border-left:3px solid #333;background:rgba(255,255,255,0.02);">
+        <div>
+          <div class="ws-name" style="color:#555;">Активный отдых</div>
+          <div class="ws-focus">Лёгкое кардио / ходьба / растяжка</div>
+        </div>
+      </div>
+    </div>
+    <div class="ws-row">
+      <div class="ws-day">День 7</div>
+      <div class="ws-bar" style="border-left:3px solid rgba(201,168,76,0.3);background:rgba(201,168,76,0.04);">
+        <div>
+          <div class="ws-name" style="color:#7A6535;">Восстановление</div>
+          <div class="ws-focus">Подготовка к следующему циклу</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="padding:0 16px 32px;">
+    <div style="padding:16px;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.15);font-size:11px;color:#888;line-height:1.7;text-align:center;">
+      <span style="color:var(--gold);font-weight:700;letter-spacing:2px;font-size:9px;display:block;margin-bottom:6px;">ПЕРИОДИЗАЦИЯ</span>
+      Система рассчитана на <strong style="color:#C0BBB0;">8-недельную периодизацию</strong>.<br>
+      Прогрессия каждую неделю: <strong style="color:#C0BBB0;">+1–2 повтора или +3–5% веса</strong>.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ RULES ══════════ -->
+<div id="page-rules" class="page">
+  <div class="day-hero">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 100%,rgba(201,168,76,0.05),transparent);pointer-events:none;"></div>
+    <div class="day-num">Система · Протокол</div>
+    <div class="day-title">Общие<br><span style="color:var(--gold);">Правила</span></div>
+  </div>
+
+  <div style="padding:16px;max-width:760px;margin:0 auto;">
+    <div class="rules-grid">
+      <div class="rule-card">
+        <div class="rule-label">RIR — База</div>
+        <div class="rule-val"><strong>1–2 повтора в запасе</strong><br>Мог сделать 12 — сделал 10.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">RIR — Изоляция</div>
+        <div class="rule-val"><strong>До 0 RIR</strong><br>Работаем до полного отказа.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Отдых между подходами</div>
+        <div class="rule-val"><strong>1–2 минуты</strong><br>По ощущениям.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Отдых между упражнениями</div>
+        <div class="rule-val"><strong>2–3 минуты</strong><br>По ощущениям.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Темп · База</div>
+        <div class="rule-val"><strong>Подконтрольно</strong><br>Особенно негативная фаза.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Темп · Изоляция</div>
+        <div class="rule-val"><strong>2 – 1 – 2</strong><br>Опускание · Пауза · Подъём.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Прогрессия</div>
+        <div class="rule-val"><strong>Каждую неделю</strong><br>+1–2 повтора или +3–5% веса.</div>
+      </div>
+      <div class="rule-card">
+        <div class="rule-label">Разминка</div>
+        <div class="rule-val"><strong>5–8 мин</strong><br>+ 2–3 подводящих подхода в первых упражнениях.</div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;padding:18px;background:rgba(201,168,76,0.04);border:1px solid rgba(201,168,76,0.15);">
+      <div style="font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;">Что такое RIR?</div>
+      <div style="font-size:12px;color:#888;line-height:1.75;">
+        <strong style="color:#C0BBB0;">Reps in Reserve</strong> — метод оценки интенсивности тренировок.<br>
+        Означает количество повторений, которые вы могли бы выполнить, но оставили «в запасе» до наступления мышечного отказа.<br><br>
+        Пример: RIR = 2 → сделал 10 повторений, хотя мог бы сделать 12.
+      </div>
+    </div>
+
+    <div style="margin-top:4px;padding:14px 18px;background:var(--card2);border:1px solid var(--border);">
+      <div style="font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">Фокус</div>
+      <div style="font-size:12px;color:#888;line-height:1.7;">В каждом дне есть приоритет, но <strong style="color:#C0BBB0;">всё тело получает стимул</strong>. Антагонисты работают в парах — одна мышца отдыхает, пока противоположная активна.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ A1 ══════════ -->
+<div id="page-a1" class="page">
+  <div class="day-hero" style="background:linear-gradient(to bottom, rgba(123,94,167,0.08), transparent);">
+    <div class="day-num">День 1 · Тренировка A1</div>
+    <div class="day-title"><span style="color:var(--legs);">Ноги</span><br>Приоритет</div>
+    <div class="day-muscles">
+      <span class="muscle-badge" style="color:var(--legs);border-color:var(--legs-b);background:var(--legs2);">Ноги (приоритет)</span>
+      <span class="muscle-badge" style="color:var(--shoulder);border-color:var(--shoulder-b);background:var(--shoulder2);">Плечи</span>
+      <span class="muscle-badge" style="color:var(--bicep);border-color:var(--bicep-b);background:var(--bicep2);">Бицепс</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <!-- BLOCK 1: LEGS + SHOULDERS -->
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--legs);"></div>
+      <div class="block-lbl-text" style="color:var(--legs);">Блок 1 · Ноги + Плечи (антагонист)</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--legs);background:var(--legs2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--legs);">1A</div>
+        <div class="ex-main">
+          <div class="ex-name">Приседания</div>
+          <div class="ex-params">
+            <span class="param">4 × 6–9</span>
+            <span class="param">RIR 1–2</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+          <a class="video-btn" href="https://www.youtube.com/watch?v=gYZxLhslYlA" target="_blank">
+            <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            Смотреть видео
+          </a>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Ключи</div>
+          <div class="ex-note-txt">Корпус жёсткий, колени по траектории носков, глубина под контроль</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Почему</div>
+          <div class="ex-note-txt">Максимальное механическое напряжение → главный драйвер роста</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--shoulder);background:var(--shoulder2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--shoulder);">1B</div>
+        <div class="ex-main">
+          <div class="ex-name">Жим гантелей на плечи</div>
+          <div class="ex-params">
+            <span class="param">3–4 × 11</span>
+            <span class="param">RIR 1–2</span>
+            <span class="param">Отдых 90 сек</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--shoulder-b);">
+          <div class="ex-note-lbl" style="color:var(--shoulder);">Ключи</div>
+          <div class="ex-note-txt">Не проваливай поясницу, контроль эксцентрики</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--shoulder-b);">
+          <div class="ex-note-lbl" style="color:var(--shoulder);">Почему</div>
+          <div class="ex-note-txt">Антагонист к ногам → держим плотность, не «убивая» присед</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 2 -->
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--legs);"></div>
+      <div class="block-lbl-text" style="color:var(--legs);">Блок 2 · Изоляция ног + Дельты</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--legs);background:var(--legs2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--legs);">2A</div>
+        <div class="ex-main">
+          <div class="ex-name">Разгибание ног</div>
+          <div class="ex-params">
+            <span class="param">3 × 11–14</span>
+            <span class="param">0–1 RIR</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Ключи</div>
+          <div class="ex-note-txt">Пауза в пике 1 секунда</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Почему</div>
+          <div class="ex-note-txt">Добивка квадрицепса после базы (метаболический стресс)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--shoulder);background:var(--shoulder2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--shoulder);">2B</div>
+        <div class="ex-main">
+          <div class="ex-name">Махи гантелей в стороны</div>
+          <div class="ex-params">
+            <span class="param">3 × 11–14</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--shoulder-b);">
+          <div class="ex-note-lbl" style="color:var(--shoulder);">Ключи</div>
+          <div class="ex-note-txt">Плечо «в стороны», не закидывать вес</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--shoulder-b);">
+          <div class="ex-note-lbl" style="color:var(--shoulder);">Почему</div>
+          <div class="ex-note-txt">Баланс дельт (после жима передняя уже загружена)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLOCK 3 -->
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--bicep);"></div>
+      <div class="block-lbl-text" style="color:var(--bicep);">Блок 3 · Бицепс бедра + Бицепс руки</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--legs);background:var(--legs2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--legs);">3A</div>
+        <div class="ex-main">
+          <div class="ex-name">Сгибание ног лёжа</div>
+          <div class="ex-params">
+            <span class="param">3 × 11–14</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Ключи</div>
+          <div class="ex-note-txt">Таз прижат, без «читинга»</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Почему</div>
+          <div class="ex-note-txt">Баланс квадрицепс ↔ бицепс бедра, защита колена</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--bicep);background:var(--bicep2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--bicep);">3B</div>
+        <div class="ex-main">
+          <div class="ex-name">Бицепс — EZ / Штанга</div>
+          <div class="ex-params">
+            <span class="param">3–4 × 8–11</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--bicep-b);">
+          <div class="ex-note-lbl" style="color:var(--bicep);">Ключи</div>
+          <div class="ex-note-txt">Локти фиксированы, контроль вниз</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--bicep-b);">
+          <div class="ex-note-lbl" style="color:var(--bicep);">Почему</div>
+          <div class="ex-note-txt">Малые группы добираем в конце, не мешая базе</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FINISHER -->
+    <div class="finisher">
+      <div class="fin-title">Финишер (опционально)</div>
+      <div class="fin-items">
+        <div class="fin-item"><span>Скручивания (или планка 2×макс)</span><span class="fin-item-num">3×15–20</span></div>
+        <div class="fin-item"><span>Прыжки на тумбу</span><span class="fin-item-num">2–3×8</span></div>
+        <div class="fin-item"><span>Ротации плеч (манжеты)</span><span class="fin-item-num">2×15–20</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ B1 ══════════ -->
+<div id="page-b1" class="page">
+  <div class="day-hero" style="background:linear-gradient(to bottom, rgba(74,124,89,0.08), transparent);">
+    <div class="day-num">День 2 · Тренировка B1</div>
+    <div class="day-title"><span style="color:var(--back);">Спина</span><br>Приоритет</div>
+    <div class="day-muscles">
+      <span class="muscle-badge" style="color:var(--back);border-color:var(--back-b);background:var(--back2);">Спина (приоритет)</span>
+      <span class="muscle-badge" style="color:var(--chest);border-color:var(--chest-b);background:var(--chest2);">Грудь</span>
+      <span class="muscle-badge" style="color:var(--tricep);border-color:var(--tricep-b);background:var(--tricep2);">Трицепс</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--back);"></div>
+      <div class="block-lbl-text" style="color:var(--back);">Блок 1 · Спина + Грудь (антагонист)</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--back);background:var(--back2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--back);">1A</div>
+        <div class="ex-main">
+          <div class="ex-name">Подтягивания</div>
+          <div class="ex-params">
+            <span class="param">4 × 11</span>
+            <span class="param">RIR 0</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);font-style:italic;">с весом / резиной по уровню</div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Почему</div>
+          <div class="ex-note-txt">Ширина + контроль + высокий нейроотклик</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Связка</div>
+          <div class="ex-note-txt">Антагонист к жиму → баланс и плотность работы</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--chest);background:var(--chest2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--chest);">1B</div>
+        <div class="ex-main">
+          <div class="ex-name">Жим штанги лёжа (горизонталь)</div>
+          <div class="ex-params">
+            <span class="param">4 × 6–10</span>
+            <span class="param">Отдых 2 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Почему</div>
+          <div class="ex-note-txt">Тяга ↔ жим = баланс и плотность работы</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Эффект</div>
+          <div class="ex-note-txt">Одна мышца отдыхает, помогая восстановлению противоположной</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--back);"></div>
+      <div class="block-lbl-text" style="color:var(--back);">Блок 2 · Объём спины</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--back);background:var(--back2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--back);">2A</div>
+        <div class="ex-main">
+          <div class="ex-name">Тяга гантелей на наклонной</div>
+          <div class="ex-params">
+            <span class="param">3 × 8–11</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Ключи</div>
+          <div class="ex-note-txt">Грудь на лавке, локти ближе к корпусу</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Почему</div>
+          <div class="ex-note-txt">Чистая нагрузка на середину спины, меньше стресса на поясницу</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--chest);"></div>
+      <div class="block-lbl-text" style="color:var(--chest);">Блок 3 · Грудь + Толщина спины</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--chest);background:var(--chest2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--chest);">3A</div>
+        <div class="ex-main">
+          <div class="ex-name">Жим гантелей на наклонной</div>
+          <div class="ex-params">
+            <span class="param">3 × 8–11</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Почему</div>
+          <div class="ex-note-txt">Верх груди + стабильность плеч. На той же лавке — легко к выполнению</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Угол</div>
+          <div class="ex-note-txt">Другой вектор нагрузки относительно горизонтального жима</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--back);background:var(--back2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--back);">3B</div>
+        <div class="ex-main">
+          <div class="ex-name">Тяга блока узким хватом</div>
+          <div class="ex-params">
+            <span class="param">3 × 8–11</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Почему</div>
+          <div class="ex-note-txt">«Толщина» спины — добавочный объём для большой группы</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Акцент</div>
+          <div class="ex-note-txt">Средняя часть спины, другой хват — другой стимул</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--tricep);"></div>
+      <div class="block-lbl-text" style="color:var(--tricep);">Блок 4 · Трицепс (добивка)</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--tricep);background:var(--tricep2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--tricep);">4</div>
+        <div class="ex-main">
+          <div class="ex-name">Разгибание рук с нижнего блока за голову</div>
+          <div class="ex-params">
+            <span class="param">4 × 11–14</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--tricep-b);">
+          <div class="ex-note-lbl" style="color:var(--tricep);">Почему</div>
+          <div class="ex-note-txt">Отличный угол → финальная добивка трицепса</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--tricep-b);">
+          <div class="ex-note-lbl" style="color:var(--tricep);">Позиция</div>
+          <div class="ex-note-txt">За голову — максимальное растяжение длинной головки</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ A2 ══════════ -->
+<div id="page-a2" class="page">
+  <div class="day-hero" style="background:linear-gradient(to bottom, rgba(201,168,76,0.08), transparent);">
+    <div class="day-num">День 4 · Тренировка A2</div>
+    <div class="day-title"><span style="color:var(--shoulder);">Плечи</span><br>Приоритет</div>
+    <div class="day-muscles">
+      <span class="muscle-badge" style="color:var(--shoulder);border-color:var(--shoulder-b);background:var(--shoulder2);">Плечи (приоритет)</span>
+      <span class="muscle-badge" style="color:var(--legs);border-color:var(--legs-b);background:var(--legs2);">Ноги</span>
+      <span class="muscle-badge" style="color:var(--glute);border-color:var(--glute-b);background:var(--glute2);">Ягодицы</span>
+      <span class="muscle-badge" style="color:var(--bicep);border-color:var(--bicep-b);background:var(--bicep2);">Бицепс</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--legs);"></div>
+      <div class="block-lbl-text" style="color:var(--legs);">Блок 1 · Ноги + Плечи (антагонист)</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--legs);background:var(--legs2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--legs);">1A</div>
+        <div class="ex-main">
+          <div class="ex-name">Жим ногами</div>
+          <div class="ex-params">
+            <span class="param">3 × 16</span>
+            <span class="param">RIR 0–1</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Ключи</div>
+          <div class="ex-note-txt">Полная амплитуда, колени контролируем</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Почему</div>
+          <div class="ex-note-txt">Больше объёма при меньшей нагрузке на ЦНС (vs. присед)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--shoulder);background:var(--shoulder2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--shoulder);">1B</div>
+        <div class="ex-main">
+          <div class="ex-name">Жим плеч в тренажёре</div>
+          <div class="ex-params">
+            <span class="param">3 × 11</span>
+            <span class="param">RIR 1–2</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--shoulder-b);">
+          <div class="ex-note-lbl" style="color:var(--shoulder);">Почему</div>
+          <div class="ex-note-txt">В тренажёре легче — поэтому на подход больше, чем на прошлой неделе</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--shoulder-b);">
+          <div class="ex-note-lbl" style="color:var(--shoulder);">Эффект</div>
+          <div class="ex-note-txt">Стабильность, контроль → качественный объём</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--legs);"></div>
+      <div class="block-lbl-text" style="color:var(--legs);">Блок 2 · Ноги объём + Дельты кроссовер</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--legs);background:var(--legs2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--legs);">2A</div>
+        <div class="ex-main">
+          <div class="ex-name">Выпады (на месте / ходьба)</div>
+          <div class="ex-params">
+            <span class="param">2 × 20 / нога</span>
+            <span class="param">Отдых 2+ мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Ключи</div>
+          <div class="ex-note-txt">Шаг достаточный, корпус стабилен</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--legs-b);">
+          <div class="ex-note-lbl" style="color:var(--legs);">Почему</div>
+          <div class="ex-note-txt">Многосоставное движение → баланс, ягодицы, координация</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--shoulder);background:var(--shoulder2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--shoulder);">2B</div>
+        <div class="ex-main">
+          <div class="ex-name">Махи в кроссовере поочерёдно — в стороны + назад</div>
+          <div class="ex-params">
+            <span class="param">3 × 10/10 + 10/10</span>
+            <span class="param">Отдых ~1 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--shoulder-b);">
+          <div class="ex-note-lbl" style="color:var(--shoulder);">Почему</div>
+          <div class="ex-note-txt">Более концентрированное напряжение в отличие от гантелей</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--shoulder-b);">
+          <div class="ex-note-lbl" style="color:var(--shoulder);">Плюс</div>
+          <div class="ex-note-txt">Безопасная изоляция — задняя и средняя дельта</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--glute);"></div>
+      <div class="block-lbl-text" style="color:var(--glute);">Блок 3 · Ягодицы + Бицепс (добивка)</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--glute);background:var(--glute2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--glute);">3A</div>
+        <div class="ex-main">
+          <div class="ex-name">Ягодичный мостик / Hip Thrust</div>
+          <div class="ex-params">
+            <span class="param">3 × 11–14</span>
+            <span class="param">Отдых 2+ мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--glute-b);">
+          <div class="ex-note-lbl" style="color:var(--glute);">Ключи</div>
+          <div class="ex-note-txt">Пауза вверху 1 сек, подбородок к груди</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--glute-b);">
+          <div class="ex-note-lbl" style="color:var(--glute);">Почему</div>
+          <div class="ex-note-txt">Акцент на ягодицы (часто недогружаются при приседе)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--bicep);background:var(--bicep2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--bicep);">3B</div>
+        <div class="ex-main">
+          <div class="ex-name">Бицепс — Гантели (дроп-сет)</div>
+          <div class="ex-params">
+            <span class="param">5 × 16→9</span>
+            <span class="param">По ощущениям</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--bicep-b);">
+          <div class="ex-note-lbl" style="color:var(--bicep);">Почему 5 подходов</div>
+          <div class="ex-note-txt">Единственное упражнение на бицепс — максимальный памп</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--bicep-b);">
+          <div class="ex-note-lbl" style="color:var(--bicep);">Метод</div>
+          <div class="ex-note-txt">Увеличение веса + снижение повторений в каждом подходе</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="finisher">
+      <div class="fin-title">Финишер (опционально)</div>
+      <div class="fin-items">
+        <div class="fin-item"><span>Скручивания (или планка 2×макс)</span><span class="fin-item-num">3×15–20</span></div>
+        <div class="fin-item"><span>Прыжки на тумбу</span><span class="fin-item-num">2–3×8</span></div>
+        <div class="fin-item"><span>Ротации плеч (манжеты)</span><span class="fin-item-num">2×15–20</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ B2 ══════════ -->
+<div id="page-b2" class="page">
+  <div class="day-hero" style="background:linear-gradient(to bottom, rgba(168,74,74,0.08), transparent);">
+    <div class="day-num">День 5 · Тренировка B2</div>
+    <div class="day-title"><span style="color:var(--chest);">Грудь</span><br>Приоритет</div>
+    <div class="day-muscles">
+      <span class="muscle-badge" style="color:var(--chest);border-color:var(--chest-b);background:var(--chest2);">Грудь (приоритет)</span>
+      <span class="muscle-badge" style="color:var(--back);border-color:var(--back-b);background:var(--back2);">Спина</span>
+      <span class="muscle-badge" style="color:var(--tricep);border-color:var(--tricep-b);background:var(--tricep2);">Трицепс</span>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--chest);"></div>
+      <div class="block-lbl-text" style="color:var(--chest);">Блок 1 · Грудь + Спина (антагонист)</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--chest);background:var(--chest2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--chest);">1A</div>
+        <div class="ex-main">
+          <div class="ex-name">Жим в тренажёре (горизонталь)</div>
+          <div class="ex-params">
+            <span class="param">4 × 9–11</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Почему</div>
+          <div class="ex-note-txt">Тяга ↔ жим = баланс и плотность работы</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Эффект</div>
+          <div class="ex-note-txt">Одна мышца отдыхает и помогает восстановлению противоположной</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--back);background:var(--back2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--back);">1B</div>
+        <div class="ex-main">
+          <div class="ex-name">Тяга верхнего блока</div>
+          <div class="ex-params">
+            <span class="param">4 × 9–11</span>
+            <span class="param">RIR 1–2</span>
+            <span class="param">Отдых 2–3 мин</span>
+          </div>
+          <div style="font-size:10px;color:var(--muted);font-style:italic;">с весом / резиной по уровню</div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Почему</div>
+          <div class="ex-note-txt">Ширина + контроль + высокий нейроотклик</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Плюс</div>
+          <div class="ex-note-txt">Отличная вариация прочувствовать и прожать мышцы спины</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--chest);"></div>
+      <div class="block-lbl-text" style="color:var(--chest);">Блок 2 · Грудь угол + Спина толщина</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--chest);background:var(--chest2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--chest);">2A</div>
+        <div class="ex-main">
+          <div class="ex-name">Жим гантелей на наклонной узким хватом</div>
+          <div class="ex-params">
+            <span class="param">3 × 9–11</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Почему</div>
+          <div class="ex-note-txt">Верх груди + стабильность + другой угол</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Разница</div>
+          <div class="ex-note-txt">Свободный вес — другой характер нагрузки vs. тренажёр</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--back);background:var(--back2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--back);">2B</div>
+        <div class="ex-main">
+          <div class="ex-name">Тяга гантелей на наклонной</div>
+          <div class="ex-params">
+            <span class="param">4 × 9–11</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Ключи</div>
+          <div class="ex-note-txt">Грудь на лавке, без «читинга»</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--back-b);">
+          <div class="ex-note-lbl" style="color:var(--back);">Почему</div>
+          <div class="ex-note-txt">Чистая нагрузка на середину спины, меньше стресса на поясницу</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-label">
+      <div class="block-dot" style="background:var(--chest);"></div>
+      <div class="block-lbl-text" style="color:var(--chest);">Блок 3 · Грудь добивка + Трицепс</div>
+      <div class="block-line"></div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--chest);background:var(--chest2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--chest);">3A</div>
+        <div class="ex-main">
+          <div class="ex-name">Сведение рук в тренажёре «Бабочка»</div>
+          <div class="ex-params">
+            <span class="param">5 × 16→9</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Почему 5 подходов</div>
+          <div class="ex-note-txt">Единственное упражнение на растяжение грудных — все фасции</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--chest-b);">
+          <div class="ex-note-lbl" style="color:var(--chest);">Метод</div>
+          <div class="ex-note-txt">Увеличение веса + снижение повторений в каждом подходе</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ex-card" style="border-left:3px solid var(--tricep);background:var(--tricep2);">
+      <div class="ex-head">
+        <div class="ex-id" style="color:var(--tricep);">3B</div>
+        <div class="ex-main">
+          <div class="ex-name">Разгибание рук с верхнего блока поочерёдно</div>
+          <div class="ex-params">
+            <span class="param">3 × 9–11</span>
+            <span class="param">Отдых 1–2 мин</span>
+          </div>
+        </div>
+      </div>
+      <div class="ex-footer">
+        <div class="ex-note" style="border-color:var(--tricep-b);">
+          <div class="ex-note-lbl" style="color:var(--tricep);">Почему</div>
+          <div class="ex-note-txt">Уже работал в жимах → финальная концентрированная добивка</div>
+        </div>
+        <div class="ex-note" style="border-color:var(--tricep-b);">
+          <div class="ex-note-lbl" style="color:var(--tricep);">Угол</div>
+          <div class="ex-note-txt">Колоссально отличается от предыдущих вариаций</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;padding:16px;background:rgba(201,168,76,0.05);border:1px solid rgba(201,168,76,0.2);text-align:center;">
+      <div style="font-size:8px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;">Периодизация</div>
+      <div style="font-size:12px;color:#888;line-height:1.7;">Система рассчитана на <strong style="color:#C0BBB0;">8-недельную периодизацию</strong>.<br>Каждый цикл — новый уровень.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function openVideo(id, title) {
+  document.getElementById('modalTitle').textContent = title;
+  document.getElementById('modalIframe').src = 'https://www.youtube.com/embed/' + id + '?autoplay=1';
+  document.getElementById('videoModal').classList.add('open');
+}
+function closeVideoModal() {
+  document.getElementById('videoModal').classList.remove('open');
+  document.getElementById('modalIframe').src = '';
+}
+function closeModal(e) {
+  if (e.target === document.getElementById('videoModal')) closeVideoModal();
+}
+function show(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
